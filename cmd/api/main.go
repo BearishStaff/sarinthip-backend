@@ -2,6 +2,7 @@ package main
 
 import (
 	"sarinthip-backend/internal/database"
+	"sarinthip-backend/internal/handlers"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -20,6 +21,11 @@ func main() {
 		AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders: []string{"Origin", "Content-Type"},
 	}))
+
+	branchHandler := handlers.NewBranchHandlers()
+	// billHandler := handlers.NewBillHandlers()
+	// incomeHandler := handlers.NewIncomeHandlers()
+
 	// 4. Routes
 	api := r.Group("/api/v1")
 	{
@@ -28,15 +34,17 @@ func main() {
 				"status": "ok",
 			})
 		})
-		// Branch Management
-		// api.GET("/branches", handlers.GetBranches)
 
-		// Expense & Bill Management
-		// api.POST("/parse", handlers.ParseRawText)    // Returns JSON for preview
-		// api.POST("/bills", handlers.CreateBillGroup) // Saves Bill + many Expenses
+		// Branches
+		api.GET("/branches", branchHandler.GetBranches)
+		// api.POST("/branches", branchHandler.CreateBranch)
+		// api.DELETE("/branches/:id", branchHandler.DeleteBranch) // e.g., /api/branches/uuid-string-here
 
-		// Income Management
-		// api.POST("/income", handlers.CreateIncome) // Saves Income record
+		// Bills & Expenses
+		// api.POST("/bills", billHandler.CreateBillGroup)
+
+		// Income
+		// api.POST("/income", incomeHandler.CreateIncome)
 	}
 
 	r.Run(":8080") // Railway/Render will detect this port

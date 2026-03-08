@@ -1,20 +1,28 @@
 package database
 
 import (
+	"context"
 	"log"
 	"os"
 
-	"gorm.io/driver/postgres"
+	"github.com/jackc/pgx/v5"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
 func Connect() {
-	dsn := os.Getenv("DATABASE_URL") // Get from Supabase connection string
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	conn, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
 	if err != nil {
-		log.Fatal("Failed to connect to database:", err)
+		log.Fatalf("Failed to connect to the database: %v", err)
 	}
-	DB = db
+	defer conn.Close(context.Background())
+
+	// Example query to test connection
+	var version string
+	if err := conn.QueryRow(context.Background(), "SELECT version()").Scan(&version); err != nil {
+		log.Fatalf("Query failed: %v", err)
+	}
+
+	log.Println("Connected to:", version)
 }

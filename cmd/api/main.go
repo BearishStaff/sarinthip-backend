@@ -1,13 +1,15 @@
 package main
 
 import (
+	"sarinthip-backend/internal/database"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	// 1. Init Database
-	// database.Connect()
+	database.Connect()
 
 	// 2. Init Gin Router
 	r := gin.Default()

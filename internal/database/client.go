@@ -1,28 +1,32 @@
 package database
 
 import (
-	"context"
 	"log"
 	"os"
 
-	"github.com/jackc/pgx/v5"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 var DB *gorm.DB
 
 func Connect() {
-	conn, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
+	// 1. Load from .env or Environment Variables
+	// Ensure your string ends with sslmode=require
+	dsn := os.Getenv("DATABASE_URL")
+
+	// 2. Open Connection
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("Failed to connect to the database: %v", err)
-	}
-	defer conn.Close(context.Background())
-
-	// Example query to test connection
-	var version string
-	if err := conn.QueryRow(context.Background(), "SELECT version()").Scan(&version); err != nil {
-		log.Fatalf("Query failed: %v", err)
+		log.Fatal("Failed to connect to Supabase:", err)
 	}
 
-	log.Println("Connected to:", version)
+	// 3. Optional: Auto-Migrate (Creates tables based on your Go structs)
+	// err = db.AutoMigrate(&models.Branch{}, &models.Bill{}, &models.Expense{})
+	// if err != nil {
+	// 	log.Fatal("Migration Failed:", err)
+	// }
+
+	log.Println("✅ Database connected via GORM")
+	DB = db
 }

@@ -18,7 +18,7 @@ func main() {
 
 	// 3. Setup CORS
 	r.Use(cors.New(cors.Config{
-		AllowOrigins: []string{"https://https://sarinthip-web.vercel.app"}, // web
+		AllowOrigins: []string{"*"}, // web
 		AllowMethods: []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders: []string{"Origin", "Content-Type"},
 	}))

@@ -23,7 +23,7 @@ func (service *BranchService) GetBranches() ([]models.Branch, error) {
 	// }
 
 	branches = []models.Branch{
-		{ID: uuid.Must(uuid.NewUUID()), Name: "ทดสอบ 1"},
+		{ID: uuid.Must(uuid.Parse("9ec944d0-3120-43d3-82e8-bb7adfad6622")), Name: "ทดสอบ 1"},
 		{ID: uuid.Must(uuid.NewUUID()), Name: "ทดสอบ 2"},
 		{ID: uuid.Must(uuid.NewUUID()), Name: "ทดสอบ 3"},
 	}

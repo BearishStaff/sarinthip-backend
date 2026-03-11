@@ -1,9 +1,10 @@
 package main
 
 import (
-	"sarinthip-backend/internal/database"
+	// "sarinthip-backend/internal/database"
 	"sarinthip-backend/internal/handlers"
-	branchsvc "sarinthip-backend/internal/pkg"
+	branchsvc "sarinthip-backend/internal/pkg/branch-service"
+	expensesvc "sarinthip-backend/internal/pkg/expense-service"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -11,7 +12,7 @@ import (
 
 func main() {
 	// 1. Init Database
-	database.Connect()
+	// database.Connect()
 
 	// 2. Init Gin Router
 	r := gin.Default()
@@ -24,8 +25,10 @@ func main() {
 	}))
 
 	branchService := branchsvc.NewBranchService()
+	expenseService := expensesvc.NewExpenseService()
 
 	branchHandler := handlers.NewBranchHandlers(branchService)
+	expenseHandler := handlers.NewExpenseHandlers(expenseService)
 
 	// 4. Routes
 	api := r.Group("/api/v1")
@@ -40,6 +43,7 @@ func main() {
 		api.GET("/branches", branchHandler.GetBranches)
 
 		// Expense
+		api.GET("/expenses/:branch_id", expenseHandler.GetExpenses)
 
 		// Income
 

@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	branchsvc "sarinthip-backend/internal/pkg"
+	branchsvc "sarinthip-backend/internal/pkg/branch-service"
 
 	"github.com/gin-gonic/gin"
 )
